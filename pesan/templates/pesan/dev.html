@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<style>
+	
+h1{
+	color: blue;
+}
+h2{
+	color:green;
+}
+
+</style>
+
+<body>
+
+
+<h1 id="sendd"></h1>
+<br>
+<h2></h2>
+
+<br>
+
+<form id="form">
+	<input type="text" id="kirimpesan" name="message">
+	<input type="submit" name="">
+</form>
+
+<script>
+	const url = '127.0.0.1:8000/chat/2xx%'
+	let url_socket = `ws://localhost:8000/chat/abccsdd2/`
+	const socket = new WebSocket(url_socket)
+
+	socket.onmessage = (e) => {
+		let data = JSON.parse(e.data)
+		console.log(data)
+		let pesanmasuk = document.getElementById('sendd')
+		pesanmasuk.innerHTML = `Pesan Nya Adalah = ${data.message}`
+	}
+
+	let form = document.getElementById('form')
+      form.addEventListener('submit', (e) => {
+      e.preventDefault()
+      let pesan = e.target.kirimpesan.value
+      socket.send(JSON.stringify({
+        'type':'pesan',
+        'status':'200',
+        'message' : pesan,
+        'id_sender':2,
+        'id_recive':1,
+      }))
+      form.reset()
+    })
+
+
+</script>
+
+
+</body>
+</html>

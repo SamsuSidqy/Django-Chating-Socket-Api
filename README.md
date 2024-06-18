@@ -47,7 +47,7 @@ You've successfully run and Api your Django Rest Framework Website. :
 #### Request Register
 
 ```http
-  POST /api/register
+POST /api/register
 ```
 
 | Body (JSON) | Type     | Description                |
@@ -60,7 +60,7 @@ You've successfully run and Api your Django Rest Framework Website. :
 #### Request Login
 
 ```http
-  POST /api/login
+POST /api/login
 ```
 
 | Body (JSON) | Type     | Description                       |

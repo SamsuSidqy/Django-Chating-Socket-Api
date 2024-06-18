@@ -41,9 +41,106 @@ python3 manage.py runserver
 
 You've successfully run and Api your Django Rest Framework Website. :
 
+
+# API Reference
+
+#### Request Register
+
+```http
+POST /api/register
+```
+
+| Body (JSON) | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `username`| `string` | **Required**.|
+| `password`| `string` | **Required**.|
+
+
+----
+#### Request Login
+
+```http
+POST /api/login
+```
+
+| Body (JSON) | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `username`      | `string` | **Required**|
+| `password`      | `string` | **Required**|
+
+
+
+---
+
+### Request Logout
+
+```http
+POST /api/logout
+```
+
+| Authroization | Description                       |
+| :-------- | :-------------------------------- |
+|`Bearer Token`| **Required**.|
+
+| Body (json) | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+|`token`|`string`|**Bearer Token**|
+---
+### Request Checking Token [Benar Atau Tidak | Expired Atau Tidak]
+
+```http
+GET /api/checking
+```
+| Authroization | Description                       |
+| :-------- | :-------------------------------- |
+|`Bearer Token`| **Required**.|
+
+| Body (json) | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+|`None`|`None`|**None**|
+
+---
+## Request Contact
+```http
+GET /contact/
+```
+| Authroization | Description                       |
+| :-------- | :-------------------------------- |
+|`Bearer Token`| **Required**.|
+
+| Body (json) | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+|`None`|`None`|**None**|
+
+---
+
+## Request Room Chatting
+```http
+GET /room/
+```
+
+| Authroization | Description                       |
+| :-------- | :-------------------------------- |
+|`Bearer Token`| **Required**.|
+
+| Body (json) | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+|`id-sender`|`integer`|**Id Dari Pengirim**|
+|`id-recive`|`integer`|**Id Dari Penerima**|
+
+---
+
+## Connect To Websocket Chatting
+
+```socket
+Websocket /chat/:koderoom/
+```
+
+
 ### Now what?
 
 - [Integration Guide Django](https://www.djangoproject.com/).
 - [Introduction to React Native](https://reactnative.dev/docs/getting-started).
 - [Integration Guide Django Rest Framework](https://www.django-rest-framework.org/)
+
 

@@ -44,36 +44,43 @@ class LoginApi(APIView):
 
     def post(self,req):
 
-        if req.data['username'] is None or req.data['password'] is None:
-            return Response({'status':500,'Message':'Username And Password Required'})
 
-        obj = Pengguna.objects.filter(username=req.data['username']).first()
+        if "username" in req.data and "password" in req.data :
 
-        # Cek Jika Query Username Tidak Di Temukan
-        if obj is None:
-            return Response({'status':404,'Message':'Username Atau Password Tidak Di Temukan'}) 
-        pswd = obj.password
-        cekPassword = check_password(req.data['password'],pswd) 
+            if req.data['username'] is None or req.data['password'] is None:
+                return Response({'status':400,'Message':'Username And Password Required'},status=400)
+            elif len(req.data['username'].strip()) == 0 or len(req.data['password'].strip()) == 0:
+                return Response({'status':400,'Message':'Username And Password Required'},status=400)
 
-        # Cek Jika Password Tidak Correct
-        if cekPassword is False:
-            return Response({'status':500,'Message':'Password Atau Username Salah'})
+            obj = Pengguna.objects.filter(username=req.data['username']).first()
 
-        checkingToken = AccessToken.objects.filter(user=obj)
-        # Cek Sudah Ada Token or Not
-        if checkingToken:
-            return Response({'Status':500,'Message':'Anda Sudah Login'})
-        token = generate_token()
-        createToken = AccessToken.objects.create(user=obj,expires=datetime(2024,5,20),token=token)        
-        serializer = PenggunaSerilisasi(obj)       
-        data = {
-            'status':200,
-            'data':serializer.data,
-            'token':createToken.token,
-            'expires':createToken.expires,
-            'token_created_at':createToken.created
-        }
-        return Response(data) 
+            # Cek Jika Query Username Tidak Di Temukan
+            if obj is None:
+                return Response({'status':404,'Message':'Username Atau Password Not Match'},status=404) 
+            pswd = obj.password
+            cekPassword = check_password(req.data['password'],pswd) 
+
+            # Cek Jika Password Tidak Correct
+            if cekPassword is False:
+                return Response({'status':404,'Message':'Password Atau Username Not Match'},status=404)
+
+            checkingToken = AccessToken.objects.filter(user=obj)
+            # Cek Sudah Ada Token or Not
+            if checkingToken:
+                return Response({'Status':400,'Message':'You Are Logged In'},status=400)
+            token = generate_token()
+            createToken = AccessToken.objects.create(user=obj,expires=datetime(2024,5,20),token=token)        
+            serializer = PenggunaSerilisasi(obj)       
+            data = {
+                'status':200,
+                'data':serializer.data,
+                'token':createToken.token,
+                'expires':createToken.expires,
+                'token_created_at':createToken.created
+            }
+            return Response(data,status=200) 
+        else:            
+            return Response({"status":500,"message":"Wrong Field Or Not Found Fields In Request"},status=400)
 
 class CekAuth(APIView):    
     authentication_classes  = [OAuth2Authentication]
@@ -89,12 +96,14 @@ class LogoutApi(APIView):
     renderer_classes = [JSONRenderer]
 
     def post(self,req):
-        cekToken = AccessToken.objects.filter(token=req.data['token'])
-        if cekToken:
-            cekToken.delete()
-            return Response({"status":200,"message":"Logout Berhasil"})
-
-        return Response({"status":500,"message":"Gagal Logout"})
+        if "token" in req.data:
+            cekToken = AccessToken.objects.filter(token=req.data['token'])
+            if cekToken:
+                cekToken.delete()
+                return Response({"status":200,"message":"Logout Berhasil"})
+            return Response({"status":500,"message":"Gagal Logout"},status=500)
+        else:
+            return Response({"status":400,"message":"Fields Token Not Found"},status=400)
 
 
 

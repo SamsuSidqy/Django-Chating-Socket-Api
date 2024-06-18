@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-e_p12&+k+)xr*%t2!ox$$0=194_gu#+gds3h2ws++^8sd)o$&a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -73,6 +73,7 @@ MIDDLEWARE = [
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 
+
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
@@ -99,8 +100,12 @@ ASGI_APPLICATION = "core.asgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'restful_chat_realtime',
+        'USER':'samsoe',
+        'PASSWORD':'samsoe',
+        'HOST':'localhost',
+        'PORT':'5432',
     }
 }
 

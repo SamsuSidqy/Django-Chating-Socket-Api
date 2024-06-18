@@ -10,6 +10,9 @@ from rest_framework.permissions import IsAuthenticated
 from base.models import Pengguna, RoomChat, Messages
 from pesan.serializer.responeapi import ContactUser, MessageUser
 
+# Home
+import json
+import uuid
 
 
 def index(req):
@@ -29,26 +32,32 @@ class RoomChatApi(APIView):
     permission_classes = [IsAuthenticated,TokenHasResourceScope]
     renderer_classes = [JSONRenderer]
 
-    def post(self,req):
-        idSender = req.data['id-sender']
-        idRecive = req.data['id-recive']
-        roomchat = None
+    def get(self,req):
 
-        if idRecive is None or idSender is None:
-            return Response({'Fields':'Required','status':500})
-        elif idRecive == idSender or idSender == idRecive:
-            return Response({'fileds':'Wrong Request','status':500})
+        if "id-sender" in req.data and "id-recive" in req.data:
+            idSender = req.data['id-sender']
+            idRecive = req.data['id-recive']
+            roomchat = None
 
-        if RoomChat.objects.filter(pengirim=idSender).first() and RoomChat.objects.filter(penerima=idRecive):
-            roomchat = RoomChat.objects.filter(pengirim=idSender).first() or RoomChat.objects.filter(penerima=idRecive)
-        elif RoomChat.objects.filter(pengirim=idRecive).first() and RoomChat.objects.filter(penerima=idSender):
-            roomchat = RoomChat.objects.filter(pengirim=idRecive).first() or RoomChat.objects.filter(penerima=idSender)        
+            if idRecive is None or idSender is None:
+                return Response({'Fields':'Required','status':500},status=500)
+            elif type(idRecive) != int or type(idSender) != int:
+                return Response({'Fields':'Fields Is Inteeger','status':500},status=500)
+            elif idRecive == idSender or idSender == idRecive:
+                return Response({'fileds':'Wrong Request','status':500},status=500)
+
+            if RoomChat.objects.filter(pengirim=idSender).first() and RoomChat.objects.filter(penerima=idRecive):
+                roomchat = RoomChat.objects.filter(pengirim=idSender).first() or RoomChat.objects.filter(penerima=idRecive)
+            elif RoomChat.objects.filter(pengirim=idRecive).first() and RoomChat.objects.filter(penerima=idSender):
+                roomchat = RoomChat.objects.filter(pengirim=idRecive).first() or RoomChat.objects.filter(penerima=idSender)        
+            else:
+                kode = uuid.uuid4()
+                roomchat = RoomChat.objects.create(pengirim_id=idSender,penerima_id=idRecive,kode_chat=kode) 
+
+
+            return Response({'status':200,'KodeRoom':roomchat.kode_chat})
         else:
-            kode = f'RM-S{idSender}-R{idRecive}'
-            roomchat = RoomChat.objects.create(pengirim_id=idSender,penerima_id=idRecive,kode_chat=kode) 
-
-
-        return Response({'Status':200,'KodeRoom':roomchat.kode_chat})
+            return Response({"status":400,"message":"Fields Not Found In Json Request"},status=400)
 
 class DataPesan(ListAPIView):
     authentication_classes  = [OAuth2Authentication]
@@ -57,4 +66,15 @@ class DataPesan(ListAPIView):
     model = Messages    
     queryset = Messages.objects.all()
     serializer_class = MessageUser
+
+    def get(self,request):
+        if "user" in request.data and type(request.data['user']) == int:
+            return self.list(request)
+        return Response({"status":400,"message":"Wrong Object In Body"},status=400)    
+
+    def get_queryset(self):
+        print(self.request.data['user'])
+        user = self.request.data['user']
+        queryset = Messages.objects.filter(sender=user) | Messages.objects.filter(recive=user)
+        return queryset
 

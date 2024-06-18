@@ -41,6 +41,71 @@ python3 manage.py runserver
 
 You've successfully run and Api your Django Rest Framework Website. :
 
+
+# Django Restful Api & Socket Web Realtime Chatting
+
+A brief description of what this project does and who it's for
+
+
+## API Reference
+
+#### Request Register
+
+```http
+  POST /api/register
+```
+
+| Body (JSON) | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `username`| `string` | **Required**.|
+| `password`| `string` | **Required**.|
+
+
+----
+#### Request Login
+
+```http
+  POST /api/login
+```
+
+| Body (JSON) | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `username`      | `string` | **Required**|
+| `password`      | `string` | **Required**|
+
+
+
+---
+
+### Request Logout
+
+```http
+POST /api/logout
+```
+
+| Authroization | Description                       |
+| :-------- | :-------------------------------- |
+|`Bearer Token`| **Required**.|
+
+| Body (json) | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+|`token`|`string`|**Bearer Token**|
+---
+### Request Checking Token [Benar Atau Tidak | Expired Atau Tidak]
+
+```http
+GET /api/checking
+```
+| Authroization | Description                       |
+| :-------- | :-------------------------------- |
+|`Bearer Token`| **Required**.|
+
+| Body (json) | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+|`None`|`None`|**None**|
+
+
+
 ### Now what?
 
 - [Integration Guide Django](https://www.djangoproject.com/).

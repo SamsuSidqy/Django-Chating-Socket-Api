@@ -42,12 +42,7 @@ python3 manage.py runserver
 You've successfully run and Api your Django Rest Framework Website. :
 
 
-# Django Restful Api & Socket Web Realtime Chatting
-
-A brief description of what this project does and who it's for
-
-
-## API Reference
+# API Reference
 
 #### Request Register
 

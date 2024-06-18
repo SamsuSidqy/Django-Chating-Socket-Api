@@ -99,6 +99,42 @@ GET /api/checking
 | :-------- | :------- | :-------------------------------- |
 |`None`|`None`|**None**|
 
+---
+## Request Contact
+```http
+GET /contact/
+```
+| Authroization | Description                       |
+| :-------- | :-------------------------------- |
+|`Bearer Token`| **Required**.|
+
+| Body (json) | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+|`None`|`None`|**None**|
+
+---
+
+## Request Room Chatting
+```http
+GET /room/
+```
+
+| Authroization | Description                       |
+| :-------- | :-------------------------------- |
+|`Bearer Token`| **Required**.|
+
+| Body (json) | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+|`id-sender`|`integer`|**Id Dari Pengirim**|
+|`id-recive`|`integer`|**Id Dari Penerima**|
+
+---
+
+## Connect To Websocket Chatting
+
+```socket
+Websocket /chat/:koderoom/
+```
 
 
 ### Now what?
